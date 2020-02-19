@@ -12,12 +12,16 @@ RGBmatrixPanel matrix(A, B, C, CLK, LAT, OE, true);
 
 long counter = 0;
 PieceType nextPiece;
-Piece piece;
+Game game;
 
 void setup() {
+  int seed = (analogRead(A3) + analogRead(A4)) * 284 - 2312;
+  randomSeed(seed);
   matrix.begin();
   Serial.begin(9600);
-  Serial.println("Start");
+  Serial.print(seed);
+  Serial.println("    Start");
+  game.newGame();
 
 }
 
@@ -31,10 +35,33 @@ void loop() {
   }
   counter += 5;
 
-  delay(10);
+  if (game.isGameover()) {
+    Serial.println("Game Over!");
+    game.newGame();
+  } else {
+    game.displayGame(&matrix);
+    game.tick();
+  }
+//  printAdjacent();
+
+
+
+
+
+
+
+  delay(30);
   matrix.swapBuffers(false);
 
 }
+
+//void printAdjacent() {
+//  for (int i = 0; i < 10; i++) {
+//    Serial.print(game.getAdjacent()[i]);
+//    Serial.print(" ");
+//  }
+//  Serial.print('\n');
+//}
 
 //void drawBase() {
 //  for(int i = 0; i < 32; i++) {
