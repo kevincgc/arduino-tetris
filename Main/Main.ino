@@ -32,9 +32,10 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(RIGHT_PIN), rightISR, RISING);
   attachInterrupt(digitalPinToInterrupt(MODE_PIN), modeISR, CHANGE);
   randomSeed(analogRead(A) + analogRead(B) + analogRead(C) + analogRead(A3) + analogRead(A4) + analogRead(A5) + analogRead(A6) + analogRead(A7) + analogRead(A8));
-  matrix.begin();
   Serial.begin(9600);
   Serial.println("Start");
+  delay(1000);
+  matrix.begin();
   game.newGame();
   prevTick = millis();
 }
@@ -49,18 +50,18 @@ void loop() {
     }
   }
   counter += 5;
-  
+
   if (upPressed || downPressed || leftPressed || rightPressed) {
-    if(upPressed) {
+    if (upPressed) {
       Serial.println("up");
     }
-    if(downPressed) {
+    if (downPressed) {
       Serial.println("down");
     }
-    if(leftPressed) {
+    if (leftPressed) {
       Serial.println("left");
     }
-    if(rightPressed) {
+    if (rightPressed) {
       Serial.println("right");
     }
     game.receiveInput(&upPressed, &downPressed, &leftPressed, &rightPressed);
@@ -73,11 +74,12 @@ void loop() {
       Serial.println("Game Over!");
       game.newGame();
     } else {
-      game.displayGame(&matrix);
       game.tick();
     }
     //matrix.swapBuffers(false);
   }
+
+  game.displayGame(&matrix);
 }
 
 //void printAdjacent() {

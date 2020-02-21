@@ -30,6 +30,7 @@ void Game::newGame () {
     }
   }
   findAdjacent();
+  piece.pieceConstructor();
 }
 
 

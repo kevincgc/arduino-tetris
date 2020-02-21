@@ -16,9 +16,12 @@ class Piece {
   public:
     int** initiateLocation();
     bool canMoveDown(const int** adjacent);
-    Piece() {
+    void pieceConstructor() {
+      Serial.println("initialize piece");
       location = initiateLocation();
       destroyPiece();
+      nextType = random(7);
+      type = random(7);
     }
     int** getLocation() {
       return location;
@@ -68,10 +71,71 @@ class Piece {
         }
       }
     }
+    bool canRotate(const int** base) {
+      Serial.print("Type: ");
+      Serial.print(type);
+      Serial.print('\n');
+      bool ret;
+      switch (type) {
+        case I:
+          if (location[1][0] >= 2 && location[1][0] <= 8 && location[1][1] <= 23) {
+            ret = true;
+          } else {
+            ret = false;
+          }
+          break;
+        case O:
+          ret = false;
+          break;
+        default:
+          if (location[1][0] >= 1 && location[1][0] <= 8) {
+            ret = true;
+          } else {
+            ret = false;
+          }
+      }
+      for (int i = 0; i < 4; i++) {
+        if (base[location[i][0]][location[i][1]]) {
+          ret = false;
+        }
+      }
+      return ret;
+    }
+
 
     void rotate() {
-      
+      switch (type) {
+        case I:
+          if (!orientation) {
+            location[0][0] = location[1][0];
+            location[2][0] = location[1][0];
+            location[3][0] = location[1][0];
+            location[0][1] = location[1][1] - 1;
+            location[2][1] = location[1][1] + 1;
+            location[3][1] = location[1][1] + 2;
+            orientation = 1;
+          } else {
+            location[0][0] = location[1][0] + 1;
+            location[2][0] = location[1][0] - 1;
+            location[3][0] = location[1][0] - 2;
+            location[0][1] = location[1][1];
+            location[2][1] = location[1][1];
+            location[3][1] = location[1][1];
+            orientation = 0;
+          }
+          break;
+          //        case O:
+          //          return false;
+          //        default:
+          //          if (location[2][0] >= 1 && location[2][0] <= 8) {
+          //            return true;
+          //          }
+          //          return false;
+          //      }
+
+      }
     }
+
 
     bool isPieceExist() {
       return pieceExist;
@@ -79,7 +143,8 @@ class Piece {
 
 
   private:
-    PieceType type = random(7), nextType = random(7);
+    PieceType type, nextType;
     int** location;
     bool pieceExist;
+    int orientation;
 };

@@ -4,6 +4,8 @@
 #define BOARD_Y 26
 
 class Game {
+  private:
+    Piece piece;
   public:
     bool isGameover();
     void displayGame(RGBmatrixPanel* matrix);
@@ -36,27 +38,35 @@ class Game {
 
     void tick() {
       if (!piece.isPieceExist()) {
-        piece.initiatePiece(random(7));
-        return;
-      }
-      //random(2) ? (canMoveRight() ? piece.moveRight() : delay(0)) : (canMoveLeft() ? piece.moveLeft() : delay(0));
-      if (piece.canMoveDown(adjacent)) {
-        piece.moveDown();
+        Serial.print("tick() creating piece: ");
+        Serial.print(next);
+        Serial.print('\n');
+        next = random(7);
+        piece.initiatePiece(next);
+        next = random(7);
+        Serial.print("tick() will create piece: ");
+        Serial.print(next);
+        Serial.print('\n');
       } else {
-        fixPiece();
-        clearFullRows();
-        piece.destroyPiece();
-        findAdjacent();
+        //random(2) ? (canMoveRight() ? piece.moveRight() : delay(0)) : (canMoveLeft() ? piece.moveLeft() : delay(0));
+        if (piece.canMoveDown(adjacent)) {
+          piece.moveDown();
+        } else {
+          fixPiece();
+          piece.destroyPiece();
+          clearFullRows();
+          findAdjacent();
+        }
       }
     }
 
     void receiveInput(bool* up, bool* down, bool* left, bool* right) {
       if (*left) {
-        canMoveLeft() ? piece.moveLeft() : delay(0);
+        if (canMoveLeft()) piece.moveLeft();
         *left = false;
       }
       if (*right) {
-        canMoveRight() ? piece.moveRight() : delay(0);
+        if (canMoveRight()) piece.moveRight();
         *right = false;
       }
       if (*down) {
@@ -64,13 +74,13 @@ class Game {
           piece.moveDown();
         }
         fixPiece();
-        clearFullRows();
         piece.destroyPiece();
+        clearFullRows();
         findAdjacent();
         *down = false;
       }
       if (*up) {
-        if (canRotate()) {
+        if (piece.canRotate(base)) {
           piece.rotate();
         }
         *up = false;
@@ -120,13 +130,11 @@ class Game {
       }
       return true;
     }
-    bool canRotate() {
-      
-    }
 
 
-    Piece piece;
+
     int** base;
     int** adjacent;
     const int** location;
+    PieceType next = random(7);
 };
