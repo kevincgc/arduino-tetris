@@ -51,8 +51,8 @@ void loop()
     if (PS4.data.status.mic)
       Serial.println("The controller has a mic attached");
 
-    //    Serial.print("Battey Percent : ");
-    //    Serial.println(PS4.data.status.battery, DEC);
+//    Serial.print("Battey Percent : ");
+//    Serial.println(PS4.data.status.battery, DEC);
 
     unsigned long oldTime;
     switch (speedState) {

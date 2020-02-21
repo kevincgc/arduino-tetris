@@ -69,6 +69,10 @@ class Piece {
       }
     }
 
+    void rotate() {
+      
+    }
+
     bool isPieceExist() {
       return pieceExist;
     }

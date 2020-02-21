@@ -9,20 +9,17 @@ class Game {
     void displayGame(RGBmatrixPanel* matrix);
     void newGame ();
     void findAdjacent();
-    int** initiateAdjacent();
+    int** initiateArray();
     int** getPieceLoc() {
       return piece.getLocation();
     }
     int** getAdjacent() {
       return adjacent;
     }
-    int** getBase() {
-      return base;
-    }
     Game() {
       location = piece.getLocation();
-      adjacent = initiateAdjacent();
-      base = initiateAdjacent();
+      adjacent = initiateArray();
+      base = initiateArray();
     }
 
     void clearFullRows () {
@@ -42,7 +39,7 @@ class Game {
         piece.initiatePiece(random(7));
         return;
       }
-      random(2) ? (canMoveRight() ? piece.moveRight() : delay(0)) : (canMoveLeft() ? piece.moveLeft() : delay(0));
+      //random(2) ? (canMoveRight() ? piece.moveRight() : delay(0)) : (canMoveLeft() ? piece.moveLeft() : delay(0));
       if (piece.canMoveDown(adjacent)) {
         piece.moveDown();
       } else {
@@ -53,10 +50,32 @@ class Game {
       }
     }
 
-
-
-
-
+    void receiveInput(bool* up, bool* down, bool* left, bool* right) {
+      if (*left) {
+        canMoveLeft() ? piece.moveLeft() : delay(0);
+        *left = false;
+      }
+      if (*right) {
+        canMoveRight() ? piece.moveRight() : delay(0);
+        *right = false;
+      }
+      if (*down) {
+        while (piece.canMoveDown(adjacent)) {
+          piece.moveDown();
+        }
+        fixPiece();
+        clearFullRows();
+        piece.destroyPiece();
+        findAdjacent();
+        *down = false;
+      }
+      if (*up) {
+        if (canRotate()) {
+          piece.rotate();
+        }
+        *up = false;
+      }
+    }
 
   private:
     void clearRow(int y_del) {
@@ -101,22 +120,12 @@ class Game {
       }
       return true;
     }
+    bool canRotate() {
+      
+    }
 
 
     Piece piece;
-//    int base[10][26] =
-//    {
-//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-//    };
-
     int** base;
     int** adjacent;
     const int** location;

@@ -31,16 +31,16 @@ void setup() {
 }
 
 void loop() {
-  if (!digitalRead(2)) {
+  if (digitalRead(2)) {
     Serial.println("up");
   }
-  if (!digitalRead(3)) {
+  if (digitalRead(3)) {
     Serial.println("down");
   }
-  if (!digitalRead(4)) {
+  if (digitalRead(4)) {
     Serial.println("left");
   }
-  if (!digitalRead(5)) {
+  if (digitalRead(5)) {
     Serial.println("right");
   }
 }

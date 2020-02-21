@@ -66,10 +66,10 @@ void Game::findAdjacent() {
 }
 
 
-int** Game::initiateAdjacent() {
-  int** arr = new int*[10];
-  for (int i = 0; i < 10; i++) {
-    arr[i] = new int[26];
+int** Game::initiateArray() {
+  int** arr = new int*[BOARD_X];
+  for (int i = 0; i < BOARD_X; i++) {
+    arr[i] = new int[BOARD_Y];
   }
   for (int x = 0; x < BOARD_X; x++) {
     for (int y = 0; y < BOARD_Y; y++) {
