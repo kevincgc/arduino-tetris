@@ -16,9 +16,13 @@ class Game {
     int** getAdjacent() {
       return adjacent;
     }
+    int** getBase() {
+      return base;
+    }
     Game() {
       location = piece.getLocation();
       adjacent = initiateAdjacent();
+      base = initiateAdjacent();
     }
 
     void clearFullRows () {
@@ -98,15 +102,22 @@ class Game {
       return true;
     }
 
-    bool isRowEmpty (int x) {
-      bool isRowEmpty = true;
-      for (int y = 0; y < BOARD_Y; y++) {
-        isRowEmpty &= base[x][y];
-      }
-      return isRowEmpty;
-    }
+
     Piece piece;
-    int base[10][26] = {};
+//    int base[10][26] =
+//    {
+//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//      {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+//    };
+
+    int** base;
     int** adjacent;
     const int** location;
 };

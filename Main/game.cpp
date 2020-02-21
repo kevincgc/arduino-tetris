@@ -26,6 +26,7 @@ void Game::newGame () {
   for (int x = 0; x < BOARD_X; x++) {
     for (int y = 0; y < BOARD_Y; y++) {
       base[x][y] = 0;
+      adjacent[x][y] = 0;
     }
   }
   findAdjacent();
@@ -43,12 +44,19 @@ bool Game::isGameover() {
 
 void Game::findAdjacent() {
   for (int x = 0; x < BOARD_X; x++) {
-    if (isRowEmpty(x)) {
-      base[x][0] = 1;
-      return;
+    bool isPieceInCol = false;
+    for (int y = 0; y < BOARD_Y - 2; y++) {
+      isPieceInCol = isPieceInCol || base[x][y];
+    }
+    if (!isPieceInCol) {
+      adjacent[x][0] = 1;
+      continue;
+    }
+    if (base[x][0]) {
+      adjacent[x][0] = 0;
     }
     for (int y = 0; y < BOARD_Y; y++) {
-      if (base[x][y] && !base[x][y + 1] && y <= BOARD_Y - 2) {
+      if (base[x][y] && !base[x][y + 1]) {
         adjacent[x][y + 1] = 1;
       } else {
         adjacent[x][y + 1] = 0;
@@ -62,6 +70,11 @@ int** Game::initiateAdjacent() {
   int** arr = new int*[10];
   for (int i = 0; i < 10; i++) {
     arr[i] = new int[26];
+  }
+  for (int x = 0; x < BOARD_X; x++) {
+    for (int y = 0; y < BOARD_Y; y++) {
+      arr[x][y] = 0;
+    }
   }
   return arr;
 }
