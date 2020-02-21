@@ -16,6 +16,8 @@ AudioGeneratorMP3 *mp3;
 AudioFileSourceSPIFFS *file;
 AudioOutputI2S *out;
 AudioFileSourceID3 *id3;
+volatile bool isInterrupt;
+const int interruptPin = 5;
 
 
 // Called when a metadata event occurs (i.e. an ID3 tag, an ICY block, etc.
@@ -39,6 +41,9 @@ void MDCallback(void *cbData, const char *type, bool isUnicode, const char *stri
   Serial.flush();
 }
 
+void IRAM_ATTR ISR() {
+  isInterrupt = true;
+}
 
 void setup()
 {
@@ -47,21 +52,30 @@ void setup()
   delay(1000);
   SPIFFS.begin();
   Serial.printf("Sample MP3 playback begins...\n");
+  pinMode(interruptPin, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(5), ISR, CHANGE);
 
   audioLogger = &Serial;
-
   out = new AudioOutputI2S(0, 1);
   mp3 = new AudioGeneratorMP3();
-
 }
 
 void loop()
 {
+  if (isInterrupt) {
+    noInterrupts();
+    mp3->stop();
+    isInterrupt = false;
+    interrupts();
+  }
   if (mp3->isRunning()) {
     if (!mp3->loop()) mp3->stop();
   } else {
-    Serial.printf("MP3 done\n");
-    file = new AudioFileSourceSPIFFS("/tetris_s.mp3");
+    if (digitalRead(interruptPin)) {
+      file = new AudioFileSourceSPIFFS("/darude_s.mp3");
+    } else {
+      file = new AudioFileSourceSPIFFS("/tetris_s.mp3");
+    }
     id3 = new AudioFileSourceID3(file);
     id3->RegisterMetadataCB(MDCallback, (void*)"ID3TAG");
     mp3->begin(id3, out);
