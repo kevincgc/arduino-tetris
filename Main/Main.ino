@@ -1,6 +1,7 @@
 #include <RGBmatrixPanel.h>
 #include "game.h"
 
+
 #define CLK 11
 #define OE   9
 #define LAT 10
@@ -42,9 +43,7 @@ void loop() {
     game.displayGame(&matrix);
     game.tick();
   }
-//  printAdjacent();
-
-
+  //  printAdjacent();
 
 
 

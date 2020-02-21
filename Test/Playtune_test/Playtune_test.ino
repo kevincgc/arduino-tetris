@@ -1,19 +1,4 @@
-//**************************************************
-//
-// Test of playtune library for Arduino MEGA 2560
-//
-// L. Shustek, 31 Jan 2011; initial release.
-// L. Shustek, 27 Feb 2011; new score data
-// L. Shustek, 6 April 2015; change for compatibility with Arduino IDE v1.6.x
-// T. Wasiluk, 28 May 2016; moved to appropriate library examples subdirectory
-//
-//**************************************************
-
 #include <Playtune.h>
-
-//------------------------------------------------
-//   scores are put in program space memory
-//------------------------------------------------
 
 const unsigned char PROGMEM score [] = {
   0x90, 76, 0x91, 40, 0, 214, 0x81, 0x91, 52, 0, 214, 0x80, 0x81, 0x90, 71, 0x91, 40, 0, 214, 0x80, 0x81,
@@ -299,8 +284,6 @@ void setup() {
   pt.tune_initchan (45);
   pt.tune_initchan (47);
   pt.tune_initchan (49);
-  pt.tune_initchan (51);
-  pt.tune_initchan (53);
 
 #define DBUG 0
 #if DBUG
