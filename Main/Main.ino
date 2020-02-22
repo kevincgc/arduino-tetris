@@ -76,27 +76,26 @@ void loop() {
     } else {
       game.tick();
     }
+    printArr(game.getBase());
     //matrix.swapBuffers(false);
   }
 
   game.displayGame(&matrix);
 }
 
-//void printAdjacent() {
-//  int** adjacent = game.getAdjacent();
-//  for (int y = 25; y >= 0; y--) {
-//    for (int x = 0; x < 10; x++) {
-//      if (adjacent[x][y]) {
-//        Serial.print("1");
-//      } else {
-//        Serial.print("0");
-//      }
-//    }
-//    Serial.print('\n');
-//  }
-//  Serial.print("==========================================================\n");
-//
-//}
+void printArr(int** arr) {
+  for (int y = 25; y >= 0; y--) {
+    for (int x = 0; x < 10; x++) {
+      if (arr[x][y]) {
+        Serial.print("1");
+      } else {
+        Serial.print("0");
+      }
+    }
+    Serial.print('\n');
+  }
+  Serial.print("==========================================================\n");
+}
 
 //void drawBase() {
 //  for(int i = 0; i < 32; i++) {

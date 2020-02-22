@@ -18,6 +18,9 @@ class Game {
     int** getAdjacent() {
       return adjacent;
     }
+    int** getBase() {
+      return base;
+    }
     Game() {
       location = piece.getLocation();
       adjacent = initiateArray();
