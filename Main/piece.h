@@ -87,7 +87,7 @@ class Piece {
           ret = false;
           break;
         default:
-          if (location[1][0] >= 1 && location[1][0] <= 8) {
+          if (location[1][0] >= 1 && location[1][0] <= 8 && location[1][1] <= 24) {
             ret = true;
           } else {
             ret = false;
@@ -112,6 +112,7 @@ class Piece {
             location[2][1] = location[1][1] + 1;
             location[3][1] = location[1][1] + 2;
             orientation = 1;
+            break;
           } else {
             location[0][0] = location[1][0] + 1;
             location[2][0] = location[1][0] - 1;
@@ -120,17 +121,159 @@ class Piece {
             location[2][1] = location[1][1];
             location[3][1] = location[1][1];
             orientation = 0;
+            break;
           }
-          break;
-          //        case O:
-          //          return false;
-          //        default:
-          //          if (location[2][0] >= 1 && location[2][0] <= 8) {
-          //            return true;
-          //          }
-          //          return false;
-          //      }
-
+        case J:
+          if (orientation == 0 || orientation == 2) {
+            location[0][0] = location[1][0];
+            location[2][0] = location[1][0];
+            location[0][1] = location[1][1] - 1;
+            location[2][1] = location[1][1] + 1;
+          }
+          if (orientation == 0) {
+            location[3][0] = location[1][0] - 1;
+            location[3][1] = location[1][1] - 1;
+            orientation = 1;
+            break;
+          }
+          if (orientation == 2) {
+            location[3][0] = location[1][0] + 1;
+            location[3][1] = location[1][1] + 1;
+            orientation = 3;
+            break;
+          }
+          if (orientation == 1 || orientation == 3) {
+            location[0][0] = location[1][0] - 1;
+            location[2][0] = location[1][0] + 1;
+            location[0][1] = location[1][1];
+            location[2][1] = location[1][1];
+          }
+          if (orientation == 1) {
+            location[3][0] = location[1][0] - 1;
+            location[3][1] = location[1][1] + 1;
+            orientation = 2;
+            break;
+          }
+          if (orientation == 3) {
+            location[3][0] = location[1][0] + 1;
+            location[3][1] = location[1][1] - 1;
+            orientation = 0;
+            break;
+          }
+        case L:
+          if (orientation == 0 || orientation == 2) {
+            location[0][0] = location[1][0];
+            location[2][0] = location[1][0];
+            location[0][1] = location[1][1] - 1;
+            location[2][1] = location[1][1] + 1;
+          }
+          if (orientation == 0) {
+            location[3][0] = location[1][0] - 1;
+            location[3][1] = location[1][1] + 1;
+            orientation = 1;
+            break;
+          }
+          if (orientation == 2) {
+            location[3][0] = location[1][0] + 1;
+            location[3][1] = location[1][1] - 1;
+            orientation = 3;
+            break;
+          }
+          if (orientation == 1 || orientation == 3) {
+            location[0][0] = location[1][0] - 1;
+            location[2][0] = location[1][0] + 1;
+            location[0][1] = location[1][1];
+            location[2][1] = location[1][1];
+          }
+          if (orientation == 1) {
+            location[3][0] = location[1][0] + 1;
+            location[3][1] = location[1][1] + 1;
+            orientation = 2;
+            break;
+          }
+          if (orientation == 3) {
+            location[3][0] = location[1][0] - 1;
+            location[3][1] = location[1][1] - 1;
+            orientation = 0;
+            break;
+          }
+        case S:
+          if (!orientation) {
+            location[0][0] = location[1][0];
+            location[2][0] = location[1][0] + 1;
+            location[3][0] = location[1][0] + 1;
+            location[0][1] = location[1][1] + 1;
+            location[2][1] = location[1][1];
+            location[3][1] = location[1][1] - 1;
+            orientation = 1;
+            break;
+          } else {
+            location[0][0] = location[1][0] + 1;
+            location[2][0] = location[1][0];
+            location[3][0] = location[1][0] - 1;
+            location[0][1] = location[1][1];
+            location[2][1] = location[1][1] - 1;
+            location[3][1] = location[1][1] - 1;
+            orientation = 0;
+            break;
+          }
+        case Z:
+          if (!orientation) {
+            location[0][0] = location[1][0];
+            location[2][0] = location[1][0] + 1;
+            location[3][0] = location[1][0] + 1;
+            location[0][1] = location[1][1] - 1;
+            location[2][1] = location[1][1];
+            location[3][1] = location[1][1] + 1;
+            orientation = 1;
+            break;
+          } else {
+            location[0][0] = location[1][0] - 1;
+            location[2][0] = location[1][0];
+            location[3][0] = location[1][0] + 1;
+            location[0][1] = location[1][1];
+            location[2][1] = location[1][1] - 1;
+            location[3][1] = location[1][1] - 1;
+            orientation = 0;
+            break;
+          }
+        case T:
+          if (orientation == 0 || orientation == 2) {
+            location[0][0] = location[1][0];
+            location[2][0] = location[1][0];
+            location[0][1] = location[1][1] - 1;
+            location[2][1] = location[1][1] + 1;
+          }
+          if (orientation == 0) {
+            location[3][0] = location[1][0] - 1;
+            location[3][1] = location[1][1];
+            orientation = 1;
+            break;
+          }
+          if (orientation == 2) {
+            location[3][0] = location[1][0] + 1;
+            location[3][1] = location[1][1];
+            orientation = 3;
+            break;
+          }
+          if (orientation == 1 || orientation == 3) {
+            location[0][0] = location[1][0] - 1;
+            location[2][0] = location[1][0] + 1;
+            location[0][1] = location[1][1];
+            location[2][1] = location[1][1];
+          }
+          if (orientation == 1) {
+            location[3][0] = location[1][0];
+            location[3][1] = location[1][1] + 1;
+            orientation = 2;
+            break;
+          }
+          if (orientation == 3) {
+            location[3][0] = location[1][0];
+            location[3][1] = location[1][1] - 1;
+            orientation = 0;
+            break;
+          }
       }
     }
 
