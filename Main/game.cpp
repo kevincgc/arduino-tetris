@@ -1,4 +1,5 @@
 #include "game.h"
+#include "rng.h"
 
 void Game::displayGame(RGBmatrixPanel* matrix) {
   for (int x = 0; x < BOARD_X; x++) {
@@ -77,4 +78,32 @@ int** Game::initiateArray() {
     }
   }
   return arr;
+}
+
+void Game::tick() {
+  if (!piece.isPieceExist()) {
+    nextType = getTrueRotateRandomByte() % 7;
+    if (nextType == lastType) {
+      nextType = getTrueRotateRandomByte() % 7;
+    }
+    lastType = nextType;
+    piece.initiatePiece(nextType);
+    return;
+  }
+  //random(2) ? (canMoveRight() ? piece.moveRight() : delay(0)) : (canMoveLeft() ? piece.moveLeft() : delay(0));
+  if (piece.canMoveDown(adjacent)) {
+    piece.moveDown();
+  } else {
+    fixPiece();
+    clearFullRows();
+    piece.destroyPiece();
+    findAdjacent();
+  }
+}
+
+void Game::init() {
+  newGame();
+  piece.init();
+  lastType = getTrueRotateRandomByte() % 7;
+  nextType = getTrueRotateRandomByte() % 7;
 }

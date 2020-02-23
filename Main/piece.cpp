@@ -17,41 +17,30 @@ bool Piece::canMoveDown(const int** adjacent) {
   return true;
 }
 
-void Piece::initiatePiece(PieceType next) {
+void Piece::initiatePiece(PieceType nextType) {
   type = nextType;
-  nextType = next;
   switch (type) {
     case I:
-      location[0][0] = 3;
-      location[1][0] = 4;
-      location[2][0] = 5;
-      location[3][0] = 6;
-      location[0][1] = 25;
-      location[1][1] = 25;
-      location[2][1] = 25;
-      location[3][1] = 25;
+      location[0][0] = 6;
+      location[1][0] = 5;
+      location[2][0] = 4;
+      location[3][0] = 3;
+      location[0][1] = 24;
+      location[1][1] = 24;
+      location[2][1] = 24;
+      location[3][1] = 24;
       break;
     case O:
       location[0][0] = 4;
       location[1][0] = 4;
       location[2][0] = 5;
       location[3][0] = 5;
-      location[0][1] = 25;
-      location[1][1] = 26;
-      location[2][1] = 25;
-      location[3][1] = 26;
-      break;
-    case J:
-      location[0][0] = 4;
-      location[1][0] = 5;
-      location[2][0] = 6;
-      location[3][0] = 6;
-      location[0][1] = 26;
-      location[1][1] = 26;
-      location[2][1] = 26;
+      location[0][1] = 24;
+      location[1][1] = 25;
+      location[2][1] = 24;
       location[3][1] = 25;
       break;
-    case L:
+    case J:
       location[0][0] = 4;
       location[1][0] = 5;
       location[2][0] = 6;
@@ -59,38 +48,49 @@ void Piece::initiatePiece(PieceType next) {
       location[0][1] = 25;
       location[1][1] = 25;
       location[2][1] = 25;
-      location[3][1] = 26;
+      location[3][1] = 24;
+      break;
+    case L:
+      location[0][0] = 6;
+      location[1][0] = 5;
+      location[2][0] = 4;
+      location[3][0] = 4;
+      location[0][1] = 25;
+      location[1][1] = 25;
+      location[2][1] = 25;
+      location[3][1] = 24;
       break;
     case S:
       location[0][0] = 6;
       location[1][0] = 5;
       location[2][0] = 5;
       location[3][0] = 4;
-      location[0][1] = 26;
-      location[1][1] = 26;
-      location[2][1] = 25;
-      location[3][1] = 25;
+      location[0][1] = 25;
+      location[1][1] = 25;
+      location[2][1] = 24;
+      location[3][1] = 24;
       break;
     case Z:
       location[0][0] = 4;
       location[1][0] = 5;
       location[2][0] = 5;
       location[3][0] = 6;
-      location[0][1] = 26;
-      location[1][1] = 26;
-      location[2][1] = 25;
-      location[3][1] = 25;
+      location[0][1] = 25;
+      location[1][1] = 25;
+      location[2][1] = 24;
+      location[3][1] = 24;
       break;
     case T:
       location[0][0] = 4;
       location[1][0] = 5;
       location[2][0] = 5;
       location[3][0] = 6;
-      location[0][1] = 26;
-      location[1][1] = 26;
-      location[2][1] = 25;
-      location[3][1] = 26;
+      location[0][1] = 25;
+      location[1][1] = 25;
+      location[2][1] = 24;
+      location[3][1] = 25;
       break;
   }
+  orientation = 0;
   pieceExist = true;
 }

@@ -1,4 +1,5 @@
 #include <RGBmatrixPanel.h>
+
 #include "piece.h"
 #define BOARD_X 10
 #define BOARD_Y 26
@@ -16,11 +17,15 @@ class Game {
     int** getAdjacent() {
       return adjacent;
     }
+    int** getBase() {
+      return base;
+    }
     Game() {
+      base = initiateArray();
       location = piece.getLocation();
       adjacent = initiateArray();
-      base = initiateArray();
     }
+    void init();
 
     void clearFullRows () {
       for (int y = 0; y < BOARD_Y; y++) {
@@ -34,29 +39,15 @@ class Game {
       }
     }
 
-    void tick() {
-      if (!piece.isPieceExist()) {
-        piece.initiatePiece(random(7));
-        return;
-      }
-      //random(2) ? (canMoveRight() ? piece.moveRight() : delay(0)) : (canMoveLeft() ? piece.moveLeft() : delay(0));
-      if (piece.canMoveDown(adjacent)) {
-        piece.moveDown();
-      } else {
-        fixPiece();
-        clearFullRows();
-        piece.destroyPiece();
-        findAdjacent();
-      }
-    }
+    void tick();
 
     void receiveInput(bool* up, bool* down, bool* left, bool* right) {
       if (*left) {
-        canMoveLeft() ? piece.moveLeft() : delay(0);
+        if (canMoveLeft()) piece.moveLeft();
         *left = false;
       }
       if (*right) {
-        canMoveRight() ? piece.moveRight() : delay(0);
+        if (canMoveRight()) piece.moveRight();
         *right = false;
       }
       if (*down) {
@@ -70,7 +61,7 @@ class Game {
         *down = false;
       }
       if (*up) {
-        if (canRotate()) {
+        if (piece.canRotate(base)) {
           piece.rotate();
         }
         *up = false;
@@ -121,10 +112,10 @@ class Game {
       return true;
     }
     bool canRotate() {
-      
+
     }
 
-
+    PieceType lastType, nextType;
     Piece piece;
     int** base;
     int** adjacent;

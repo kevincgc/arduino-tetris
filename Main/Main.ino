@@ -17,9 +17,6 @@ const int UP_PIN = 2, DOWN_PIN = 3, LEFT_PIN = 18, RIGHT_PIN = 19, MODE_PIN = 20
 volatile boolean upPressed, downPressed, leftPressed, rightPressed, fastMode;
 unsigned long prevTick;
 
-
-
-
 void setup() {
   pinMode(UP_PIN, INPUT);
   pinMode(DOWN_PIN, INPUT);
@@ -31,12 +28,11 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(LEFT_PIN), leftISR, RISING);
   attachInterrupt(digitalPinToInterrupt(RIGHT_PIN), rightISR, RISING);
   attachInterrupt(digitalPinToInterrupt(MODE_PIN), modeISR, CHANGE);
-  randomSeed(analogRead(A) + analogRead(B) + analogRead(C) + analogRead(A3) + analogRead(A4) + analogRead(A5) + analogRead(A6) + analogRead(A7) + analogRead(A8));
   matrix.begin();
   Serial.begin(9600);
   Serial.println("Start");
-  game.newGame();
   prevTick = millis();
+  game.init();
 }
 
 void loop() {
@@ -49,52 +45,49 @@ void loop() {
     }
   }
   counter += 5;
-  
+
   if (upPressed || downPressed || leftPressed || rightPressed) {
-    if(upPressed) {
+    if (upPressed) {
       Serial.println("up");
     }
-    if(downPressed) {
+    if (downPressed) {
       Serial.println("down");
     }
-    if(leftPressed) {
+    if (leftPressed) {
       Serial.println("left");
     }
-    if(rightPressed) {
+    if (rightPressed) {
       Serial.println("right");
     }
     game.receiveInput(&upPressed, &downPressed, &leftPressed, &rightPressed);
-    //matrix.swapBuffers(false);
   }
 
-  if (millis() > prevTick + 1000) {
+  if (millis() > prevTick + 30) {
     prevTick = millis();
     if (game.isGameover()) {
       Serial.println("Game Over!");
       game.newGame();
     } else {
-      game.displayGame(&matrix);
       game.tick();
     }
-    //matrix.swapBuffers(false);
   }
+
+  game.displayGame(&matrix);
 }
 
-//void printAdjacent() {
-//  int** adjacent = game.getAdjacent();
-//  for (int y = 25; y >= 0; y--) {
-//    for (int x = 0; x < 10; x++) {
-//      if (adjacent[x][y]) {
-//        Serial.print("1");
-//      } else {
-//        Serial.print("0");
-//      }
-//    }
-//    Serial.print('\n');
-//  }
-//  Serial.print("==========================================================\n");
-//
-//}
+void printArr(int** arr) {
+  for (int y = 25; y >= 0; y--) {
+    for (int x = 0; x < 10; x++) {
+      if (arr[x][y]) {
+        Serial.print("1");
+      } else {
+        Serial.print("0");
+      }
+    }
+    Serial.print('\n');
+  }
+  Serial.print("==========================================================\n");
+}
 
 //void drawBase() {
 //  for(int i = 0; i < 32; i++) {
@@ -108,21 +101,6 @@ void loop() {
 //  }
 //}
 
-//void IRAM_ATTR upISR() {
-//  upPressed = !upPressed;
-//}
-//void IRAM_ATTR downISR() {
-//  downPressed = !downPressed;
-//}
-//void IRAM_ATTR leftISR() {
-//  leftPressed = !leftPressed;
-//}
-//void IRAM_ATTR rightISR() {
-//  rightPressed = !rightPressed;
-//}
-//void IRAM_ATTR modeISR() {
-//  fastMode = !fastMode;
-//}
 
 void upISR() {
   upPressed = true;
