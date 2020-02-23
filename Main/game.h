@@ -23,13 +23,16 @@ class Game {
     Game();
 
     void clearFullRows () {
-      for (int y = 0; y < BOARD_Y; y++) {
-        bool isFull = 1;
+      int y = 0;
+      while (y < BOARD_Y - 1) {
+        bool isFull = true;
         for (int x = 0; x < BOARD_X; x++) {
           isFull &= base[x][y];
         }
         if (isFull) {
           clearRow(y);
+        } else {
+          y++;
         }
       }
     }
@@ -49,10 +52,6 @@ class Game {
         while (piece.canMoveDown(adjacent)) {
           piece.moveDown();
         }
-        fixPiece();
-        clearFullRows();
-        piece.destroyPiece();
-        findAdjacent();
         *down = false;
       }
       if (*up) {

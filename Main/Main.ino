@@ -57,6 +57,8 @@ void loop() {
     } else {
       game.tick();
     }
+    //    printArr(game.getBase());
+        printArr1(game.getAdjacent());
   }
 
   game.displayGame(&matrix);
@@ -69,6 +71,19 @@ void printArr(int** arr) {
         Serial.print("1");
       } else {
         Serial.print("0");
+      }
+    }
+    Serial.print('\n');
+  }
+  Serial.print("==========================================================\n");
+}
+void printArr1(int** arr) {
+  for (int y = 25; y >= 0; y--) {
+    for (int x = 0; x < 10; x++) {
+      if (arr[x][y]) {
+        Serial.print("X");
+      } else {
+        Serial.print("O");
       }
     }
     Serial.print('\n');

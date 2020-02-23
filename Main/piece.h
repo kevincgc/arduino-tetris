@@ -71,9 +71,6 @@ class Piece {
     }
 
     bool canRotate(const int** base) {
-      Serial.print("Type: ");
-      Serial.print(type);
-      Serial.print('\n');
       bool ret;
       switch (type) {
         case I:
