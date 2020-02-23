@@ -18,8 +18,6 @@ class Piece {
     bool canMoveDown(const int** adjacent);
     Piece() {
       location = initiateLocation();
-    }
-    void init() {
       destroyPiece();
     }
 

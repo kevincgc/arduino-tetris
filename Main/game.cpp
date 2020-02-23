@@ -101,9 +101,11 @@ void Game::tick() {
   }
 }
 
-void Game::init() {
+Game::Game() {
+  base = initiateArray();
+  location = piece.getLocation();
+  adjacent = initiateArray();
   newGame();
-  piece.init();
   lastType = getTrueRotateRandomByte() % 7;
   nextType = getTrueRotateRandomByte() % 7;
 }

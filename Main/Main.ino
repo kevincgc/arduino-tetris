@@ -32,7 +32,6 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Start");
   prevTick = millis();
-  game.init();
 }
 
 void loop() {
@@ -47,22 +46,10 @@ void loop() {
   counter += 5;
 
   if (upPressed || downPressed || leftPressed || rightPressed) {
-    if (upPressed) {
-      Serial.println("up");
-    }
-    if (downPressed) {
-      Serial.println("down");
-    }
-    if (leftPressed) {
-      Serial.println("left");
-    }
-    if (rightPressed) {
-      Serial.println("right");
-    }
     game.receiveInput(&upPressed, &downPressed, &leftPressed, &rightPressed);
   }
 
-  if (millis() > prevTick + 30) {
+  if (millis() > prevTick + 1000) {
     prevTick = millis();
     if (game.isGameover()) {
       Serial.println("Game Over!");
@@ -88,19 +75,6 @@ void printArr(int** arr) {
   }
   Serial.print("==========================================================\n");
 }
-
-//void drawBase() {
-//  for(int i = 0; i < 32; i++) {
-//    for(int j = 0; j < 16; j++) {
-//      if (base[i][j]) {
-//        matrix.drawPixel(i, j, matrix.Color333(7, 7, 7));
-//      } else {
-//        matrix.drawPixel(i, j, matrix.Color333(0, 0, 0));
-//      }
-//    }
-//  }
-//}
-
 
 void upISR() {
   upPressed = true;

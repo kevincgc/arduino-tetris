@@ -20,12 +20,7 @@ class Game {
     int** getBase() {
       return base;
     }
-    Game() {
-      base = initiateArray();
-      location = piece.getLocation();
-      adjacent = initiateArray();
-    }
-    void init();
+    Game();
 
     void clearFullRows () {
       for (int y = 0; y < BOARD_Y; y++) {
