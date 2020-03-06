@@ -72,9 +72,9 @@ void loop()
     if (!mp3->loop()) mp3->stop();
   } else {
     if (digitalRead(interruptPin)) {
-      file = new AudioFileSourceSPIFFS("/darude_s.mp3");
+      file = new AudioFileSourceSPIFFS("/2hu.mp3");
     } else {
-      file = new AudioFileSourceSPIFFS("/tetris_s.mp3");
+      file = new AudioFileSourceSPIFFS("/polkka.mp3");
     }
     id3 = new AudioFileSourceID3(file);
     id3->RegisterMetadataCB(MDCallback, (void*)"ID3TAG");
