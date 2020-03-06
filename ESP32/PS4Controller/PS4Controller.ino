@@ -1,8 +1,8 @@
 #include <PS4Controller.h>
+#include "Tone32.h"
 
 const int UP_PIN = 19, DOWN_PIN = 18, LEFT_PIN = 5, RIGHT_PIN = 17, MUSIC_PIN = 16, FAST_PIN = 4, SLOW_PIN = 0;
-int speedState;
-
+long oldTime, connectedTime;
 void setup()
 {
   Serial.begin(115200);
@@ -16,14 +16,17 @@ void setup()
   pinMode(SLOW_PIN, OUTPUT);
 
   Serial.println("Ready.");
-  speedState = 0;
-  digitalWrite(MODE_PIN, LOW);
+  oldTime = millis();
+  connectedTime = millis();
 }
 
 void loop()
 {
   // Below has all accessible outputs from the controller
   if (PS4.isConnected()) {
+    if (millis() == connectedTime + 5000) {
+      Serial.println("connected");
+    }
     if ( PS4.data.button.up || PS4.data.button.cross ) {
       digitalWrite(UP_PIN, HIGH);
     } else {
@@ -73,29 +76,19 @@ void loop()
     if (PS4.data.status.mic)
       Serial.println("The controller has a mic attached");
 
-    //    Serial.print("Battey Percent : ");
-    //    Serial.println(PS4.data.status.battery, DEC);
-    //
-    //    unsigned long oldTime;
-    //    switch (speedState) {
-    //      case 0:
-    //        if (PS4.data.button.triangle) {
-    //          oldTime = millis();
-    //          speedState = 1;
-    //        }
-    //        break;
-    //      case 1:
-    //        if (!PS4.data.button.triangle) {
-    //          speedState = 0;
-    //        }
-    //        if (millis() > oldTime + 50000) {
-    //          speedState = 2;
-    //        }
-    //        break;
-    //      case 2:
-    //        digitalWrite(MODE_PIN, (digitalRead(MODE_PIN) == LOW) ? HIGH : LOW);
-    //        speedState = 0;
-    //        break;
-    //    }
+    if ( PS4.data.button.l1 ) {
+      Serial.println("tone");
+      tone(2, 932, 1000 / 2, 0); //play on pin 2
+    } else {
+      noTone(2, 0); //stop on pin 2
+    }
+    if (millis() > oldTime + 2000) {
+      showBattery();
+    }
   }
+}
+
+void showBattery() {
+  Serial.print("Battey Percent : ");
+  Serial.println(PS4.data.status.battery, DEC);
 }
