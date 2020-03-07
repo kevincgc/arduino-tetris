@@ -1,6 +1,8 @@
 #include "game.h"
 #include "rng.h"
 
+
+
 void Game::displayGame(RGBmatrixPanel* matrix) {
   for (int x = 0; x < BOARD_X; x++) {
     for (int y = 0; y < BOARD_Y; y++) {
@@ -12,12 +14,12 @@ void Game::displayGame(RGBmatrixPanel* matrix) {
     }
   }
   for (int y = 3; y < 13; y++) {
-    matrix->drawPixel(27, y, matrix->ColorHSV(0, 150, 100, true));
-    matrix->drawPixel(28, y, matrix->ColorHSV(0, 150, 100, true));
+    matrix->drawPixel(27, y, matrix->ColorHSV(190, 150, 70, true));
+    matrix->drawPixel(28, y, matrix->ColorHSV(190, 150, 70, true));
   }
   for (int i = 0; i < 4; i++) {
     if (piece.getLocation()[i][0] >= 0) {
-      matrix->drawPixel(piece.getLocation()[i][1] + 3, piece.getLocation()[i][0] + 3, matrix->Color333(2, 0, 2));
+      matrix->drawPixel(piece.getLocation()[i][1] + 3, piece.getLocation()[i][0] + 3, matrix->ColorHSV(HUE[lastType], 255, 75, true));
     }
   }
 }
@@ -82,12 +84,12 @@ int** Game::initiateArray() {
 
 void Game::tick() {
   if (!piece.isPieceExist()) {
+    lastType = nextType;
     nextType = getTrueRotateRandomByte() % 7;
     if (nextType == lastType) {
       nextType = getTrueRotateRandomByte() % 7;
     }
-    lastType = nextType;
-    piece.initiatePiece(nextType);
+    piece.initiatePiece(lastType);
     return;
   }
   //random(2) ? (canMoveRight() ? piece.moveRight() : delay(0)) : (canMoveLeft() ? piece.moveLeft() : delay(0));

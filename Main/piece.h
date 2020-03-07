@@ -1,29 +1,21 @@
+#pragma once
+#include "defines.h"
 #include "Arduino.h"
 #define BOARD_X 10
 #define BOARD_Y 26
 
-enum PieceType {
-  I,
-  O,
-  J,
-  L,
-  S,
-  Z,
-  T
-};
-
 class Piece {
   public:
-    int** initiateLocation();
-    bool canMoveDown(const int** adjacent);
     Piece() {
       location = initiateLocation();
       destroyPiece();
     }
-
+    int** initiateLocation();
     int** getLocation() {
       return location;
     }
+    void initiatePiece(PieceType next);
+    bool canMoveDown(const int** adjacent);
     void moveDown() {
       for (int i = 0; i < 4; i++) {
         location[i][1] -= 1;
@@ -36,7 +28,6 @@ class Piece {
       pieceExist = false;
     }
 
-    void initiatePiece(PieceType next);
 
     bool canMoveRight() {
       for (int i = 0; i < 4; i++) {

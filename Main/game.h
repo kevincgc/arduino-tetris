@@ -1,8 +1,11 @@
+#pragma once
 #include <RGBmatrixPanel.h>
 
 #include "piece.h"
 #define BOARD_X 10
 #define BOARD_Y 26
+
+
 
 class Game {
   public:
@@ -19,6 +22,9 @@ class Game {
     }
     int** getBase() {
       return base;
+    }
+    PieceType getNextPieceType() {
+      return nextType;
     }
     Game();
 

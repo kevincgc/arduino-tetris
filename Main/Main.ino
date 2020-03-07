@@ -1,4 +1,5 @@
 #include <RGBmatrixPanel.h>
+#include "defines.h"
 #include "game.h"
 
 #define CLK 11
@@ -8,14 +9,18 @@
 #define B   A1
 #define C   A2
 
-RGBmatrixPanel matrix(A, B, C, CLK, LAT, OE, false);
+const int UP_PIN = 2, DOWN_PIN = 3, LEFT_PIN = 18, RIGHT_PIN = 19, FAST_PIN = 20, SLOW_PIN = 21;
+const int DISPLAY_REFRESH_RATE = 100;
+const int TICK_RATE[] = {800, 600, 400};
 
+
+RGBmatrixPanel matrix(A, B, C, CLK, LAT, OE, false);
 long counter = 0;
 PieceType nextPiece;
 Game game;
-const int UP_PIN = 2, DOWN_PIN = 3, LEFT_PIN = 18, RIGHT_PIN = 19, FAST_PIN = 20, SLOW_PIN = 21;
 volatile boolean upPressed, downPressed, leftPressed, rightPressed, fastPressed, slowPressed;
-unsigned long prevTick;
+unsigned long prevTick, oldDisplayTime;
+GameSpeed gameSpeed;
 
 void setup() {
   pinMode(UP_PIN, INPUT);
@@ -30,28 +35,22 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(RIGHT_PIN), rightISR, RISING);
   attachInterrupt(digitalPinToInterrupt(FAST_PIN), fastISR, RISING);
   attachInterrupt(digitalPinToInterrupt(SLOW_PIN), slowISR, RISING);
+  gameSpeed = NORMAL;
+  prevTick = millis();
+  oldDisplayTime = millis();
+
   matrix.begin();
   Serial.begin(9600);
   Serial.println("Start");
-  prevTick = millis();
 }
 
 void loop() {
-
-  for (int x = 0; x < 32; x++) {
-    for (int y = 0; y < 16; y++) {
-      if (!(y > 2 && y < 13 && x > 2 && x < 29)) {
-        matrix.drawPixel(x, y, matrix.ColorHSV(counter, 255, 75, true));
-      }
-    }
-  }
-  counter += 5;
-
   if (upPressed || downPressed || leftPressed || rightPressed) {
     game.receiveInput(&upPressed, &downPressed, &leftPressed, &rightPressed);
   }
+  updateSpeed();
 
-  if (millis() > prevTick + 1000) {
+  if (millis() > prevTick + TICK_RATE[gameSpeed]) {
     prevTick = millis();
     if (game.isGameover()) {
       Serial.println("Game Over!");
@@ -60,10 +59,13 @@ void loop() {
       game.tick();
     }
     //    printArr(game.getBase());
-        printArr1(game.getAdjacent());
+    //printArr1(game.getAdjacent());
   }
-
-  game.displayGame(&matrix);
+  if (millis() > oldDisplayTime + DISPLAY_REFRESH_RATE) {
+    drawBorder();
+    game.displayGame(&matrix);
+    oldDisplayTime = millis();
+  }
 }
 
 void printArr(int** arr) {
@@ -93,6 +95,40 @@ void printArr1(int** arr) {
   Serial.print("==========================================================\n");
 }
 
+void drawBorder() {
+  Color nextColor = (Color)game.getNextPieceType();
+  for (int x = 0; x < 32; x++) {
+    for (int y = 0; y < 16; y++) {
+      if (gameSpeed == SLOW) {
+        if (!(y > 2 && y < 13 && x > 2 && x < 29) && !(x < 2 || x > 29 || y < 2 || y > 13)) {
+          matrix.drawPixel(x, y, matrix.ColorHSV(50000L, 255, 75, true));
+        }
+      }
+      if (gameSpeed == NORMAL) {
+        if (!(y > 2 && y < 13 && x > 2 && x < 29) && !(x < 1 || x > 30 || y < 1 || y > 14)) {
+          matrix.drawPixel(x, y, matrix.ColorHSV(HUE[nextColor], 255, 75, true));
+        }
+      }
+      if (gameSpeed == FAST) {
+        if (!(y > 2 && y < 13 && x > 2 && x < 29)) {
+          matrix.drawPixel(x, y, matrix.ColorHSV(150000L, 255, 75, true));
+        }
+      }
+    }
+  }
+}
+void updateSpeed() {
+  if (fastPressed) {
+    if (gameSpeed != FAST) gameSpeed = gameSpeed + 1;
+    fastPressed = false;
+    drawBorder();
+  }
+  if (slowPressed) {
+    if (gameSpeed != SLOW) gameSpeed = gameSpeed - 1;
+    fastPressed = false;
+    drawBorder();
+  }
+}
 void upISR() {
   upPressed = true;
 }

@@ -1,3 +1,4 @@
+#pragma once
 const int waitTime = 16;
 uint8_t lastuint8_t = 0;
 uint8_t leftStack = 0;
