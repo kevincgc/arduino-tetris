@@ -1,8 +1,9 @@
 #include <PS4Controller.h>
 #include "Tone32.h"
 
-const int UP_PIN = 19, DOWN_PIN = 18, LEFT_PIN = 5, RIGHT_PIN = 17, MUSIC_PIN = 16, FAST_PIN = 4, SLOW_PIN = 0;
-long oldTime, connectedTime;
+const int UP_PIN = 19, DOWN_PIN = 18, LEFT_PIN = 5, RIGHT_PIN = 17, MUSIC_PIN = 16, FAST_PIN = 4, SLOW_PIN = 0, LINE_CLEAR_PIN = 21;
+volatile bool playSound = false;
+
 void setup()
 {
   Serial.begin(115200);
@@ -14,25 +15,21 @@ void setup()
   pinMode(MUSIC_PIN, OUTPUT);
   pinMode(FAST_PIN, OUTPUT);
   pinMode(SLOW_PIN, OUTPUT);
+  pinMode(LINE_CLEAR_PIN, INPUT);
+  attachInterrupt(digitalPinToInterrupt(LINE_CLEAR_PIN), isr, RISING);
 
   Serial.println("Ready.");
-  oldTime = millis();
-  connectedTime = millis();
 }
 
 void loop()
 {
   // Below has all accessible outputs from the controller
   if (PS4.isConnected()) {
-    if (millis() == connectedTime + 5000) {
-      Serial.println("connected");
-    }
     if ( PS4.data.button.up || PS4.data.button.cross ) {
       digitalWrite(UP_PIN, HIGH);
     } else {
       digitalWrite(UP_PIN, LOW);
     }
-
     if ( PS4.data.button.down || PS4.data.button.circle ) {
       digitalWrite(DOWN_PIN, HIGH);
     } else {
@@ -53,11 +50,6 @@ void loop()
     } else {
       digitalWrite(MUSIC_PIN, LOW);
     }
-    if ( PS4.data.button.triangle ) {
-      digitalWrite(MUSIC_PIN, HIGH);
-    } else {
-      digitalWrite(MUSIC_PIN, LOW);
-    }
     if ( PS4.data.button.l2 ) {
       digitalWrite(SLOW_PIN, HIGH);
     } else {
@@ -69,26 +61,25 @@ void loop()
       digitalWrite(FAST_PIN, LOW);
     }
 
+
+    if (playSound) {
+      tone(2, NOTE_B6, 1000 / 8, 0);
+      tone(2, NOTE_C6, 1000 / 8, 0);
+      playSound = false;
+    }
+
+
     if (PS4.data.status.charging)
       Serial.println("The controller is charging");
     if (PS4.data.status.audio)
       Serial.println("The controller has headphones attached");
     if (PS4.data.status.mic)
       Serial.println("The controller has a mic attached");
-
-    if ( PS4.data.button.l1 ) {
-      Serial.println("tone");
-      tone(2, 932, 1000 / 2, 0); //play on pin 2
-    } else {
-      noTone(2, 0); //stop on pin 2
-    }
-    if (millis() > oldTime + 2000) {
-      showBattery();
-    }
+    //    Serial.print("Battey Percent : ");
+    //    Serial.println(PS4.data.status.battery, DEC);
   }
 }
 
-void showBattery() {
-  Serial.print("Battey Percent : ");
-  Serial.println(PS4.data.status.battery, DEC);
+void isr() {
+  playSound = true;
 }
