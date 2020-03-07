@@ -13,8 +13,8 @@ RGBmatrixPanel matrix(A, B, C, CLK, LAT, OE, false);
 long counter = 0;
 PieceType nextPiece;
 Game game;
-const int UP_PIN = 2, DOWN_PIN = 3, LEFT_PIN = 18, RIGHT_PIN = 19, MODE_PIN = 20;
-volatile boolean upPressed, downPressed, leftPressed, rightPressed, fastMode;
+const int UP_PIN = 2, DOWN_PIN = 3, LEFT_PIN = 18, RIGHT_PIN = 19, FAST_PIN = 20, SLOW_PIN = 21;
+volatile boolean upPressed, downPressed, leftPressed, rightPressed, fastPressed, slowPressed;
 unsigned long prevTick;
 
 void setup() {
@@ -22,12 +22,14 @@ void setup() {
   pinMode(DOWN_PIN, INPUT);
   pinMode(LEFT_PIN, INPUT);
   pinMode(RIGHT_PIN, INPUT);
-  pinMode(MODE_PIN, INPUT);
+  pinMode(FAST_PIN, INPUT);
+  pinMode(SLOW_PIN, INPUT);
   attachInterrupt(digitalPinToInterrupt(UP_PIN), upISR, RISING);
   attachInterrupt(digitalPinToInterrupt(DOWN_PIN), downISR, RISING);
   attachInterrupt(digitalPinToInterrupt(LEFT_PIN), leftISR, RISING);
   attachInterrupt(digitalPinToInterrupt(RIGHT_PIN), rightISR, RISING);
-  attachInterrupt(digitalPinToInterrupt(MODE_PIN), modeISR, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(FAST_PIN), fastISR, RISING);
+  attachInterrupt(digitalPinToInterrupt(SLOW_PIN), slowISR, RISING);
   matrix.begin();
   Serial.begin(9600);
   Serial.println("Start");
@@ -103,6 +105,9 @@ void leftISR() {
 void rightISR() {
   rightPressed = true;
 }
-void modeISR() {
-  fastMode = !fastMode;
+void fastISR() {
+  fastPressed = true;
+}
+void slowISR() {
+  slowPressed = true;
 }
