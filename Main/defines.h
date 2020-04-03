@@ -19,4 +19,4 @@ enum Color {
   PURPLE
 };
 
-const int HUE[] = {750, 250, 850, 150, 300, 0, 1200};
+const int HUE[] = {750, 250, 850, 150, 300, 0, 1250};

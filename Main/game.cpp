@@ -4,22 +4,24 @@
 
 
 void Game::displayGame(RGBmatrixPanel* matrix) {
-  for (int x = 0; x < BOARD_X; x++) {
-    for (int y = 0; y < BOARD_Y; y++) {
-      if (base[x][y]) {
-        matrix->drawPixel(y + 3, x + 3, matrix->Color333(1, 1, 1));
-      } else {
-        matrix->drawPixel(y + 3, x + 3, matrix->Color333(0, 0, 0));
+  if (!isGameover()) {
+    for (int x = 0; x < BOARD_X; x++) {
+      for (int y = 0; y < BOARD_Y; y++) {
+        if (base[x][y]) {
+          matrix->drawPixel(y + 3, x + 3, matrix->Color333(1, 1, 1));
+        } else {
+          matrix->drawPixel(y + 3, x + 3, matrix->Color333(0, 0, 0));
+        }
       }
     }
-  }
-  for (int y = 3; y < 13; y++) {
-    matrix->drawPixel(27, y, matrix->ColorHSV(190, 150, 70, true));
-    matrix->drawPixel(28, y, matrix->ColorHSV(190, 150, 70, true));
-  }
-  for (int i = 0; i < 4; i++) {
-    if (piece.getLocation()[i][0] >= 0) {
-      matrix->drawPixel(piece.getLocation()[i][1] + 3, piece.getLocation()[i][0] + 3, matrix->ColorHSV(HUE[lastType], 255, 75, true));
+    for (int y = 3; y < 13; y++) {
+      matrix->drawPixel(27, y, matrix->ColorHSV(190, 150, 70, true));
+      matrix->drawPixel(28, y, matrix->ColorHSV(190, 150, 70, true));
+    }
+    for (int i = 0; i < 4; i++) {
+      if (piece.getLocation()[i][0] >= 0) {
+        matrix->drawPixel(piece.getLocation()[i][1] + 3, piece.getLocation()[i][0] + 3, matrix->ColorHSV(HUE[lastType], 255, 75, true));
+      }
     }
   }
 }

@@ -89,32 +89,28 @@ void loop() {
 }
 
 void updateLcd() {
-  char score[5];
-  itoa(game.getScore(), score, 5);
   lcd.write(254);
   lcd.write(128);
   lcd.write("Score: ");
-  lcd.write(score);
-  lcd.write("     ");
+  lcd.print(game.getScore(), DEC);
+  lcd.write("  ");
   lcd.write(254);
   lcd.write(192);
   lcd.write("Speed: ");
-  char spd[5];
-  itoa(tickRate, spd, 5);
-  lcd.write(spd);
-  lcd.write("     ");
+  lcd.print(tickRate, DEC);
+  lcd.write("  ");
 }
 
 void printGameOver() {
   lcd.write(254);
   lcd.write(128);
   lcd.write("Game Over!");
+  lcd.write("     ");
   lcd.write(254);
   lcd.write(192);
-  char score[5];
-  itoa(game.getScore(), score, 5);
   lcd.write("Score: ");
-  lcd.write(score);
+  lcd.print(game.getScore(), DEC);
+  lcd.write("     ");
 }
 
 
@@ -154,29 +150,16 @@ void drawBorder() {
       }
     }
   }
-  //  for (int x = 0; x < 32; x++) {
-  //    for (int y = 0; y < 16; y++) {
-  //      if (gameSpeed == SLOW) {
-  //        if (!(y > 2 && y < 13 && x > 2 && x < 29) && !(x < 2 || x > 29 || y < 2 || y > 13)) {
-  //          matrix.drawPixel(x, y, matrix.ColorHSV(50000L, 255, 75, true));
-  //        }
-  //      }
-  //      if (gameSpeed == NORMAL) {
-  //        if (!(y > 2 && y < 13 && x > 2 && x < 29) && !(x < 1 || x > 30 || y < 1 || y > 14)) {
-  //          matrix.drawPixel(x, y, matrix.ColorHSV(HUE[nextColor], 255, 75, true));
-  //        }
-  //      }
-  //      if (gameSpeed == FAST) {
-  //        if (!(y > 2 && y < 13 && x > 2 && x < 29)) {
-  //          matrix.drawPixel(x, y, matrix.ColorHSV(150000L, 255, 75, true));
-  //        }
-  //      }
-  //    }
-  //  }
 }
 void updateSpeed() {
   if (fastPressed) {
-    tickRate += 100;
+    if (tickRate < 100) {
+      tickRate = 100;
+    } else if (tickRate < 300) {
+      tickRate += 50;
+    } else {
+      tickRate += 100;
+    }
     fastPressed = false;
   }
   if (slowPressed) {
@@ -184,6 +167,8 @@ void updateSpeed() {
       tickRate -= 100;
     } else if (tickRate >= 150) {
       tickRate -= 50;
+    } else if (tickRate >= 60) {
+      tickRate -= 20;
     }
     slowPressed = false;
   }
