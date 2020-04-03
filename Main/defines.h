@@ -1,10 +1,4 @@
 #pragma once
-enum GameSpeed {
-  SLOW,
-  NORMAL,
-  FAST
-};
-
 enum PieceType {
   I,
   O,

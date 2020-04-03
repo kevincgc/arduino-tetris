@@ -1,6 +1,7 @@
 #include <RGBmatrixPanel.h>
 #include "defines.h"
 #include "game.h"
+#include <SoftwareSerial.h>
 
 #define CLK 11
 #define OE   9
@@ -12,7 +13,7 @@
 const int UP_PIN = 2, DOWN_PIN = 3, LEFT_PIN = 18, RIGHT_PIN = 19, FAST_PIN = 20, SLOW_PIN = 21;
 const int DISPLAY_REFRESH_RATE = 100;
 const int TICK_RATE[] = {800, 600, 400};
-
+SoftwareSerial lcd(3, 4);  // pin 4 = TX
 
 RGBmatrixPanel matrix(A, B, C, CLK, LAT, OE, false);
 long counter = 0;
@@ -21,6 +22,7 @@ Game game;
 volatile boolean upPressed, downPressed, leftPressed, rightPressed, fastPressed, slowPressed;
 unsigned long prevTick, oldDisplayTime;
 GameSpeed gameSpeed;
+int oldScore = -1, oldSpeed = 0;
 
 void setup() {
   pinMode(UP_PIN, INPUT);
@@ -40,8 +42,12 @@ void setup() {
   oldDisplayTime = millis();
 
   matrix.begin();
-  Serial.begin(9600);
-  Serial.println("Start");
+  lcd.begin(9600);
+  lcd.write("test");
+  lcd.write("                ");
+  lcd.write("                ");
+//  Serial.begin(9600);
+//  Serial.println("Game start");
 }
 
 void loop() {
@@ -66,6 +72,28 @@ void loop() {
     game.displayGame(&matrix);
     oldDisplayTime = millis();
   }
+
+  if (oldScore != game.getScore() || oldSpeed != TICK_RATE[gameSpeed]) {
+    updateLcd();
+    oldScore = game.getScore();
+    oldSpeed = TICK_RATE[gameSpeed];
+  }
+}
+
+void updateLcd() {
+  char score[5];
+  itoa(game.getScore(), score, 5);
+  lcd.write(254);
+  lcd.write(128);
+  lcd.write("Score: ");
+  lcd.write(score);
+  lcd.write("     ");
+  lcd.write(254); // move cursor to beginning of first line
+  lcd.write(192);
+  lcd.write("Speed: ");
+  itoa(10000 / TICK_RATE[gameSpeed], score, 5);
+  lcd.write(score);
+  lcd.write("     ");
 }
 
 void printArr(int** arr) {

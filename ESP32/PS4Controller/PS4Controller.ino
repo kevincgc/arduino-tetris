@@ -23,7 +23,6 @@ void setup()
 
 void loop()
 {
-  // Below has all accessible outputs from the controller
   if (PS4.isConnected()) {
     if ( PS4.data.button.up || PS4.data.button.cross ) {
       digitalWrite(UP_PIN, HIGH);
@@ -67,16 +66,6 @@ void loop()
       tone(2, NOTE_C6, 1000 / 8, 0);
       playSound = false;
     }
-
-
-    if (PS4.data.status.charging)
-      Serial.println("The controller is charging");
-    if (PS4.data.status.audio)
-      Serial.println("The controller has headphones attached");
-    if (PS4.data.status.mic)
-      Serial.println("The controller has a mic attached");
-    //    Serial.print("Battey Percent : ");
-    //    Serial.println(PS4.data.status.battery, DEC);
   }
 }
 

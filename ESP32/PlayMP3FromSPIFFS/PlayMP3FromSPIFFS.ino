@@ -6,12 +6,6 @@
 #include "AudioGeneratorMP3.h"
 #include "AudioOutputI2SNoDAC.h"
 
-// To run, set your ESP8266 build to 160MHz, and include a SPIFFS of 512KB or greater.
-// Use the "Tools->ESP8266/ESP32 Sketch Data Upload" menu to write the MP3 to SPIFFS
-// Then upload the sketch normally.
-
-// pno_cs from https://ccrma.stanford.edu/~jos/pasp/Sound_Examples.html
-
 AudioGeneratorMP3 *mp3;
 AudioFileSourceSPIFFS *file;
 AudioOutputI2S *out;

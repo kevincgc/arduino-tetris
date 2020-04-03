@@ -23,6 +23,9 @@ class Game {
     int** getBase() {
       return base;
     }
+    int getScore() {
+      return score;
+    }
     PieceType getNextPieceType() {
       return nextType;
     }
@@ -36,6 +39,7 @@ class Game {
           isFull &= base[x][y];
         }
         if (isFull) {
+          score++;
           clearRow(y);
         } else {
           y++;
@@ -120,4 +124,5 @@ class Game {
     int** base;
     int** adjacent;
     const int** location;
+    int score;
 };

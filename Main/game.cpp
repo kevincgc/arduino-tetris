@@ -33,6 +33,7 @@ void Game::newGame () {
     }
   }
   findAdjacent();
+  score = 0;
 }
 
 
