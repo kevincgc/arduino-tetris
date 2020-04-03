@@ -48,16 +48,10 @@ bool Game::isGameover() {
 
 void Game::findAdjacent() {
   for (int x = 0; x < BOARD_X; x++) {
-    bool isPieceInCol = false;
-    for (int y = 0; y < BOARD_Y - 2; y++) {
-      isPieceInCol = isPieceInCol || base[x][y];
-    }
-    if (!isPieceInCol) {
-      adjacent[x][0] = 1;
-      continue;
-    }
     if (base[x][0]) {
       adjacent[x][0] = 0;
+    } else {
+      adjacent[x][0] = 1;
     }
     for (int y = 0; y < BOARD_Y; y++) {
       if (base[x][y] && !base[x][y + 1]) {
@@ -93,7 +87,6 @@ void Game::tick() {
     piece.initiatePiece(lastType);
     return;
   }
-  //random(2) ? (canMoveRight() ? piece.moveRight() : delay(0)) : (canMoveLeft() ? piece.moveLeft() : delay(0));
   if (piece.canMoveDown(adjacent)) {
     piece.moveDown();
   } else {
